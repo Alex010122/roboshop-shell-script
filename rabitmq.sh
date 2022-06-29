@@ -1,0 +1,1 @@
+echo install rabitmq componetnt
