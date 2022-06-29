@@ -18,4 +18,3 @@ payment:
 	bash component/payment.sh
 user:
 	bash component/user.sh
-
