@@ -14,7 +14,7 @@ npm install
 
 
 
-
+sed -i -e 's/MONGO-DNSNAME/mongodb.roboshop.internal/' /home/roboshop/catalogue/systemd.service
 #1. Update SystemD file with correct IP addresses
 
 #    Update `MONGO_DNSNAME` with MongoDB Server IP
