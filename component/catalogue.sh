@@ -14,13 +14,9 @@ npm install
 
 
 
-sed -i -e 's/MONGO-DNSNAME/mongodb.roboshop.internal/' /home/roboshop/catalogue/systemd.service
-#1. Update SystemD file with correct IP addresses
+sed -i -e 's/MONGO_DNSNAME/mongodb.roboshop.internal/' /home/roboshop/catalogue/systemd.service
 
-#    Update `MONGO_DNSNAME` with MongoDB Server IP
-
-#2. Now, lets set up the service with systemctl.
 mv /home/roboshop/catalogue/systemd.service /etc/systemd/system/catalogue.service
 systemctl daemon-reload
-systemctl start catalogue
+systemctl restart catalogue
 systemctl enable catalogue
