@@ -32,11 +32,11 @@ echo "uninstall plugin validate_password;" | mysql --connect-expired-password -u
 ##To download schema, Use the following command
 #> uninstall plugin validate_password;
 #
-#curl -s -L -o /tmp/mysql.zip "https://github.com/roboshop-devops-project/mysql/archive/main.zip"
-#cd /tmp
-#cd mysql-main
-#unzip mysql.zip
-#mysql -u root -pRoboShop@1 <shipping.sql
+curl -s -L -o /tmp/mysql.zip "https://github.com/roboshop-devops-project/mysql/archive/main.zip"
+cd /tmp
+cd mysql-main
+unzip -o mysql.zip
+mysql -u root -p"${MYSQL_PASSWORD}" <shipping.sql
 #
 #
 #Load the schema for Services.
