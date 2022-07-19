@@ -105,8 +105,9 @@ PRINT "Clean old content"
  mv ${COMPONENT}-main/* . && mv static/* .&& rm -rf ${COMPONENT}-main README.md && mv localhost.conf /etc/nginx/default.d/roboshop.conf
   CHECK_STAT $?
 
-PRINT "update ${COMPONENT} configuration "
+PRINT "update ${COMPONENT} configuration"
  sed -i -e '/catalogue/ s/localhost/catalogue.roboshop.internal/' -e '/user/ s/localhost/user.roboshop.internal/' -e '/cart/ s/localhost/cart.roboshop.internal/' -e '/payment/ s/localhost/payment.roboshop.internal/' -e '/shipping/ s/localhost/shipping.roboshop.internal/' /etc/nginx/default.d/roboshop.conf
+CHECK_STAT $?
 
 PRINT " Start Nginx Service"
 systemctl enable nginx &>>${LOG} && systemctl restart nginx &>>${LOG}
