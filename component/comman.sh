@@ -63,7 +63,7 @@ CHECK_STAT $?
 mv ${COMPONENT}-main ${COMPONENT}
 cd ${COMPONENT}
 
-PRINT "install nodjs dependencies for ${COMPONENT}"
+PRINT "install nodjs dependencies for ${COMPONENT} component"
 npm install &>>${LOG}
 CHECK_STAT $?
 
