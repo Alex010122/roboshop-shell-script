@@ -77,7 +77,7 @@ CHECK_STAT $?
 
 
 systemctl daemon-reload
-systemctl enable ${COMPONENT}
+systemctl enable ${COMPONENT} &>>${LOG}
 
 PRINT "restart ${COMPONENT} service"
 systemctl restart ${COMPONENT} &>>${LOG}
