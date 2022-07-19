@@ -120,7 +120,7 @@ CHECK_STAT $?
 
 }
 
-MAVEV() {
+MAVEN() {
 
 CHECK_ROOT
 PRINT " Installing Maven"
