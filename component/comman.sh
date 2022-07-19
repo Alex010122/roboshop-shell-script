@@ -24,6 +24,44 @@ PRINT () {
   echo "$1"
 }
 
+APP_COMMON_SETUP() {
+  PRINT "creating application user"
+  id roboshop &>>${LOG}
+  if [ $? -ne 0 ]; then
+    useradd roboshop &>>${LOG}
+  fi
+  CHECK_STAT $?
+
+  PRINT "Downloading ${COMPONENT} content"
+  curl -s -L -o /tmp/${COMPONENT}.zip "https://github.com/roboshop-devops-project/${COMPONENT}/archive/main.zip" &>>${LOG}
+  CHECK_STAT $?
+
+  cd /home/roboshop
+
+  PRINT "remove old content"
+  rm -rf ${COMPONENT} &>>${LOG}
+  CHECK_STAT $?
+
+  PRINT "extract ${COMPONENT} content"
+  unzip /tmp/${COMPONENT}.zip &>>${LOG}
+  CHECK_STAT $?
+
+}
+
+SYSTEMD() {
+
+  PRINT "update systemd configuration"
+  sed -i -e 's/REDIS_ENDPOINT/redis.roboshop.internal/' -e 's/CATALOGUE_ENDPOINT/catalogue.roboshop.internal/' -e 's/MONGO_ENDPOINT/mongodb.roboshop.internal/' -e 's/MONGO_DNSNAME/mongodb.roboshop.internal/' /home/roboshop/${COMPONENT}/systemd.service &>>${LOG}
+  CHECK_STAT $?
+
+  PRINT "setup systemd conf"
+  mv /home/roboshop/${COMPONENT}/systemd.service /etc/systemd/system/${COMPONENT}.service &>>${LOG} && systemctl daemon-reload
+  CHECK_STAT $?
+
+  PRINT "restart ${COMPONENT} service"
+  systemctl enable ${COMPONENT} &>>${LOG} && systemctl restart ${COMPONENT} &>>${LOG}
+  CHECK_STAT $?
+}
 
 NODEJS() {
 CHECK_ROOT
@@ -37,47 +75,14 @@ PRINT "Installing nodejs"
 yum install nodejs -y &>>${LOG}
 CHECK_STAT $?
 
-PRINT "creating application user"
-id roboshop &>>${LOG}
-if [ $? -ne 0 ]; then
-  useradd roboshop &>>${LOG}
-fi
-CHECK_STAT $?
+APP_COMMON_SETUP
 
-PRINT "Downloading ${COMPONENT} content"
-curl -s -L -o /tmp/${COMPONENT}.zip "https://github.com/roboshop-devops-project/${COMPONENT}/archive/main.zip" &>>${LOG}
-CHECK_STAT $?
-
-
-cd /home/roboshop
-
-PRINT "remove old content"
-rm -rf ${COMPONENT} &>>${LOG}
-CHECK_STAT $?
-
-PRINT "extract ${COMPONENT} content"
-unzip /tmp/${COMPONENT}.zip &>>${LOG}
-CHECK_STAT $?
-
-
-mv ${COMPONENT}-main ${COMPONENT}
-cd ${COMPONENT}
 
 PRINT "install nodjs dependencies for ${COMPONENT} component"
-npm install &>>${LOG}
+mv ${COMPONENT}-main ${COMPONENT} && cd ${COMPONENT} && npm install &>>${LOG}
 CHECK_STAT $?
 
-PRINT "update systemd configuration"
-sed -i -e 's/REDIS_ENDPOINT/redis.roboshop.internal/' -e 's/CATALOGUE_ENDPOINT/catalogue.roboshop.internal/' -e 's/MONGO_ENDPOINT/mongodb.roboshop.internal/' -e 's/MONGO_DNSNAME/mongodb.roboshop.internal/' /home/roboshop/${COMPONENT}/systemd.service &>>${LOG}
-CHECK_STAT $?
-
-PRINT "setup systemd conf"
-mv /home/roboshop/${COMPONENT}/systemd.service /etc/systemd/system/${COMPONENT}.service &>>${LOG} && systemctl daemon-reload
-CHECK_STAT $?
-
-PRINT "restart ${COMPONENT} service"
-systemctl enable ${COMPONENT} &>>${LOG} && systemctl restart ${COMPONENT} &>>${LOG}
-CHECK_STAT $?
+SYSTEMD
 
 }
 
@@ -113,4 +118,20 @@ PRINT " Start Nginx Service"
 systemctl enable nginx &>>${LOG} && systemctl restart nginx &>>${LOG}
 CHECK_STAT $?
 
+}
+
+MAVEV() {
+
+CHECK_ROOT
+PRINT " Installing Maven"
+yum install maven -y &>>${LOG}
+CHECK_STAT $?
+
+APP_COMMON_SETUP
+
+PRINT " Compile ${COMPONENT} Code "
+mv ${COMPONENT}-main ${COMPONENT} && cd ${COMPONENT} && mvn clean package && mv target/${COMPONENT}-1.0.jar ${COMPONENT}.jar
+CHECK_STAT $?
+
+SYSTEMD
 }

@@ -1,5 +1,7 @@
 source component/comman.sh
+COMPONENT=shihpping
 CHECK_ROOT
+
  yum install maven -y
  useradd roboshop
  cd /home/roboshop
