@@ -44,7 +44,7 @@ if [ $? -ne 0 ]; then
 fi
 CHECK_STAT $?
 
-PRINT "DownloADING ${COMPONENT} content"
+PRINT "Downloading ${COMPONENT} content"
 curl -s -L -o /tmp/${COMPONENT}.zip "https://github.com/roboshop-devops-project/cart/archive/main.zip" &>>${LOG}
 CHECK_STAT $?
 
@@ -55,8 +55,8 @@ PRINT "remove old content"
 rm -rf ${COMPONENT} &>>${LOG}
 CHECK_STAT $?
 
-PRINT "extract cart content"
-unzip -o /tmp/${COMPONENT}.zip &>>${LOG}
+PRINT "extract ${COMPONENT} content"
+unzip /tmp/${COMPONENT}.zip &>>${LOG}
 CHECK_STAT $?
 
 
