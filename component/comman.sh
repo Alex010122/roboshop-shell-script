@@ -98,7 +98,7 @@ PRINT "Clean old content"
  CHECK_STAT $?
 
  PRINT "extract ${COMPONENT} content "
- unzip /tmp/${COMPONENT}.zip
+ unzip /tmp/${COMPONENT}.zip &>>${LOG}
  CHECK_STAT $?
 
  PRINT "Configure ${COMPONENT} "
