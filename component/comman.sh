@@ -56,7 +56,7 @@ rm -rf ${COMPONENT} &>>${LOG}
 CHECK_STAT $?
 
 PRINT "extract cart content"
-unzip /tmp/${COMPONENT}.zip &>>${LOG}
+unzip -o /tmp/${COMPONENT}.zip &>>${LOG}
 CHECK_STAT $?
 
 
