@@ -1,10 +1,5 @@
- USER_ID=$(id -u)
- if [ $USER_ID -ne 0 ]; then
-    echo You are non root user
-    echo you can run this script as root user or with sudo
-    exit 1
- fi
-
+source component/comman.sh
+CHECK_ROOT
 curl -s -L -o /etc/yum.repos.d/mysql.repo https://raw.githubusercontent.com/roboshop-devops-project/mysql/main/mysql.repo
 yum install mysql-community-server -y
 systemctl enable mysqld
