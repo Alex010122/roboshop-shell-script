@@ -1,3 +1,3 @@
 source component/comman.sh
 COMPONENT=payment
-PYTHON3()
+PYTHON
