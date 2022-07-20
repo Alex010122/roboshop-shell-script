@@ -1,4 +1,4 @@
-source components/comman.sh
+source component/comman.sh
 
 CHECK_ROOT
 
